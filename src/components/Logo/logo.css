@@ -1,21 +1,26 @@
-.logo {
-  background-color: #d9d9d9;
-  border-radius: 95px;
-  display: inline-block;
-  height: 190px;
-  width: 322px;
-  position: relative;
+.logo{
+  background: var(--accent);
+  border-radius: 0 0 14px 14px;
+  padding: 20px;
+  text-align: center;
+  color:#fff;
+}
+.logo-icon{
+position: absolute;
+width: 69px;
+height: 69px;
+left: 16px;
+top: 50px;
+
+background: url(.png);
+
+}
+.logo-text .brand{
+  font-size:20px;
+  font-weight:700;
+}
+.logo-text .welcome{
+  font-size:13px;
+  opacity:0.85;
 }
 
-.logo .text-wrapper {
-  color: #000000;
-  font-family: "Noto Sans-Black", Helvetica;
-  font-size: 16px;
-  font-weight: 900;
-  left: 124px;
-  letter-spacing: 0;
-  line-height: normal;
-  position: absolute;
-  text-align: center;
-  top: 83px;
-}
