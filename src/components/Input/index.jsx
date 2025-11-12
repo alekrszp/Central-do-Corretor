@@ -1,4 +1,3 @@
-import React from "react";
 import "./input.css";
 export default function Input({ label, type = "text", placeholder, value, onChange, id, ...props }) {
   return (

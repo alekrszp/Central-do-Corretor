@@ -1,5 +1,5 @@
 import { useEffect, useContext, useState } from "react";
-import { Navbar } from "../components";
+import { Navbar, Loading } from "../components";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { getPoints, postPoint } from '../services/mapService';
 import { useAuth } from "../contexts/AuthContext";
@@ -11,15 +11,24 @@ const containerStyle = {
 
 // Como pegar a posição atual do usuário?
 // Dica: use Geolocation API do navegador
-const center = {
+
+
+let center = {
   lat: -23.55052,
   lng: -46.633308,
 };
 
+navigator.geolocation.getCurrentPosition((position) => {
+  center = {
+    lat: position.coords.latitude,
+    lng: position.coords.longitude
+  }
+})
+
 export const Map = () => {
   const { token } = useAuth();
   const [markers, setMarkers] = useState([]);
-  
+
   // Substitua pela sua chave da API do Google Maps
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
@@ -48,7 +57,7 @@ export const Map = () => {
     };
     try {
       const savedPoint = await postPoint(token, newPoint);
-      
+
       // savedPoint vem com os campos id, latitude, longitude e descricao
       // Precisamos transformar em um objeto com os campos id, title, position
       const savedMarker = {
@@ -85,7 +94,7 @@ export const Map = () => {
             ))}
           </GoogleMap>
         ) : (
-          <div>Carregando mapa...</div>
+          <Loading />
         )}
       </div>
     </>
