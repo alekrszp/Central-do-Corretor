@@ -1,4 +1,11 @@
 .title {
-    font-size: 24px;
+    text-align: center;
+    margin: 0.25em;
+    font-size: 64px;
     font-weight: bold;
+    background: linear-gradient(90deg, #8483F6 39%, #9480F6 95%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
 }

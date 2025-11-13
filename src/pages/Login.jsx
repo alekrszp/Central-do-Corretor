@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Logo, Title, Input, Button, Loading } from "../components";
+import { Title, Input, Button, Loading } from "../components";
 import { signIn } from "../services/authService";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
@@ -27,7 +27,6 @@ export function Login() {
     <>
       {isLoading && (<Loading />)}
       <div className="container">
-        <Logo />
         <Title title="Login" />
         <form onSubmit={handleSubmit}>
           <Input label="Usuário" placeholder="Digite seu usuário" value={email} onChange={e => setEmail(e.target.value)} />

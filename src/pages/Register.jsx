@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Logo, Title, Input, Button, Loading } from "../components";
+import { Title, Input, Button, Loading } from "../components";
 import { Link, useNavigate } from "react-router-dom";
 import { signUp } from "../services/authService";
 export function Register() {
@@ -25,8 +25,7 @@ export function Register() {
     <>
       {isLoading && (<Loading />)}
       <div className="container">
-        <Logo />
-        <Title title="Cadastro" />
+        <Title title="Registro" />
         <form onSubmit={handleSubmit}>
           <Input label="Nome" placeholder="Digite seu nome" value={name} onChange={e => setName(e.target.value)} />
           <Input label="Email" placeholder="Digite seu email" type="email" value={email} onChange={e => setEmail(e.target.value)} />
@@ -35,7 +34,7 @@ export function Register() {
           <Button type="submit">Cadastrar</Button>
         </form>
         <div style={{ textAlign: "center", marginTop: "16px", fontSize: "14px" }}>
-          <span>Já tem conta? <Link to="/login">Faça login</Link></span>
+          <span>Já tem conta? <Link to="/">Faça login</Link></span>
         </div>
       </div>
     </>
