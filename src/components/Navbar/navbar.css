@@ -1,11 +1,14 @@
 .navbar {
+  position: fixed;
   display:flex;
   justify-content:space-between;
+  width: 100%;
   align-items:center;
   background-color: var(--accent);
   color:#fff;
-  padding:16px 24px;
+  padding:28px 24px;
   font-weight:600;
+  z-index: 1;
 }
 .navbar .close{
   background:transparent;

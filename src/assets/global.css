@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* src/assets/global.css */
-:root{
+:root {
   --bg-grad-1: #F6F3FF;
   --bg-grad-2: #EEF2FF;
   --accent: #7B61FF;
@@ -9,36 +9,60 @@
   --muted: #707070;
   --input-bg: #fff;
 }
-*{box-sizing:border-box}
-html,body,#root{height:100%}
-body{
-  margin:0;
+
+* {
+  box-sizing: border-box
+}
+
+html,
+body,
+#root {
+  height: 100%
+}
+
+body {
+  margin: 0;
   font-family: Inter, "Noto Sans", "Helvetica Neue", Arial, sans-serif;
-  background: linear-gradient(180deg, rgba(243,240,255,1) 0%, rgba(244,246,255,1) 100%);
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  color:#222;
+  background: linear-gradient(180deg, rgba(243, 240, 255, 1) 0%, rgba(244, 246, 255, 1) 100%);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #222;
   -webkit-tap-highlight-color: transparent;
 }
+
 .container {
   padding: 20px;
   width: 100%;
   max-width: 420px;
   margin: 0 auto;
 }
+
 .small {
   font-size: 13px;
   color: var(--muted);
 }
+
+button:hover {
+  cursor: pointer;
+}
+
 a {
   color: var(--accent-dark);
   text-decoration: none;
 }
-a:hover { text-decoration: underline; }
+
+a:hover {
+  text-decoration: underline;
+}
+
 .full-viewport {
   height: calc(100vh - 68px);
   width: 100%;
 }
-@media(min-width:720px){
-  .container{ padding:32px; max-width:520px; }
+
+@media(min-width:720px) {
+  .container {
+    padding: 32px;
+    max-width: 520px;
+  }
 }

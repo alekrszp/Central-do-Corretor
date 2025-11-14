@@ -5,5 +5,7 @@ import { Navbar } from './Navbar';
 import { Title } from './Title';
 import { PrivateRoute } from './PrivateRoute';
 import { Loading } from './Loading';
-export { Button, Input, Logo, Navbar, Title, PrivateRoute, Loading };
+import { NavMenu } from './NavMenu';
+import { OverlayTitle } from "./OverlayTitle"
+export { Button, Input, Logo, Navbar, Title, PrivateRoute, Loading, NavMenu, OverlayTitle };
 

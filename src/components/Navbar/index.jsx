@@ -1,11 +1,26 @@
+import { useState } from "react";
 import "./navbar.css";
-import { useAuth } from "../../contexts/AuthContext";
-export function Navbar() {
-  const { logout } = useAuth();
+import { NavMenu, OverlayTitle } from "../index";
+export function Navbar({titulo}) {
+  const [isNavMenuOpen, setIsNavMenuOpen] = useState(false)
+
+  const handleNavStateClick = () => {
+    if(!isNavMenuOpen){
+      setIsNavMenuOpen(true)
+    } else{
+      setIsNavMenuOpen(false)
+    }
+  }
+
   return (
-    <header className="navbar">
-      <div className="nav-title">Central Do Corretor</div>
-      <button className="close" onClick={logout}>✕</button>
-    </header>
+    <>
+      {isNavMenuOpen && <NavMenu closeNav={handleNavStateClick} />}
+      <header className="navbar">
+        <button className="close" onClick={handleNavStateClick}>☰</button>
+        <div className="nav-title">Central Do Corretor</div>
+      </header>
+      <OverlayTitle>{titulo}</OverlayTitle>
+    </>
+
   );
 }

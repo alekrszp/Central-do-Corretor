@@ -15,9 +15,9 @@ function App() {
         <Route
           path="/map"
           element={
-            <PrivateRoute>
+            
               <Map />
-            </PrivateRoute>
+            
           }
         />
         <Route path="*" element={<Navigate to="/" />} />

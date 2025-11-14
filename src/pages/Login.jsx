@@ -29,7 +29,7 @@ export function Login() {
       <div className="container">
         <Title title="Login" />
         <form onSubmit={handleSubmit}>
-          <Input label="Usuário" placeholder="Digite seu usuário" value={email} onChange={e => setEmail(e.target.value)} />
+          <Input label="E-mail" placeholder="Digite seu e-mail" value={email} onChange={e => setEmail(e.target.value)} />
           <Input label="Senha" placeholder="Digite sua senha" type="password" value={senha} onChange={e => setSenha(e.target.value)} />
           {erro && <p style={{ color: "red" }}>{erro}</p>}
           <Button type="submit">Entrar</Button>
