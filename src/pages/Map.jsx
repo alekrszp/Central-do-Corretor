@@ -1,102 +1,85 @@
-import { useEffect, useContext, useState } from "react";
-import { Navbar, Loading } from "../components";
+import { useState } from "react";
+import { Navbar } from "../components";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
-import { getPoints, postPoint } from '../services/mapService';
-import { useAuth } from "../contexts/AuthContext";
+import PropertyCard from "../components/PropertyCard/PropertyCard";
+import "./Map.css";
 
 const containerStyle = {
   width: "100%",
-  height: "100%",
+  height: "100vh",
 };
 
-// Como pegar a posição atual do usuário?
-// Dica: use Geolocation API do navegador
+let center = { lat: -28.452, lng: -52.200 };
 
+export default function Map() {
+  const [selectedMarker, setSelectedMarker] = useState(null);
 
-let center = {
-  lat: -23.55052,
-  lng: -46.633308,
-};
-
-navigator.geolocation.getCurrentPosition((position) => {
-  center = {
-    lat: position.coords.latitude,
-    lng: position.coords.longitude
-  }
-})
-
-export const Map = () => {
-  const { token } = useAuth();
-  const [markers, setMarkers] = useState([]);
-
-  // Substitua pela sua chave da API do Google Maps
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
   });
 
-  useEffect(() => {
-    async function fetchMarkers() {
-      try {
-        const data = await getPoints(token);
-        setMarkers(data);
-      } catch (error) {
-        console.log(error.message);
-      }
-    }
-    fetchMarkers();
-  }, [token]);
-
-  // Função para adicionar ponto ao clicar no mapa
-  const handleMapClick = async (event) => {
-    const lat = event.latLng.lat();
-    const lng = event.latLng.lng();
-    const newPoint = {
-      latitude: lat,
-      longitude: lng,
-      descricao: "Descrição do ponto", // Você pode personalizar isso
-    };
-    try {
-      const savedPoint = await postPoint(token, newPoint);
-
-      // savedPoint vem com os campos id, latitude, longitude e descricao
-      // Precisamos transformar em um objeto com os campos id, title, position
-      const savedMarker = {
-        id: savedPoint.id,
-        title: savedPoint.descricao || "Novo Ponto",
-        position: {
-          lat: savedPoint.latitude,
-          lng: savedPoint.longitude,
-        },
-      };
-      setMarkers((prev) => [...prev, savedMarker]);
-    } catch (error) {
-      alert(error.message);
-    }
-  };
+  const properties = [
+    {
+      id: 1,
+      name: "Edifício Plex",
+      address: "Rua João Navário Astolfo, 957",
+      rooms: 3,
+      bathrooms: 2,
+      area: "84m²",
+      description:
+        "O Edifício Plex é um moderno complexo residencial composto por duas torres.",
+      image: "/imoveis/plex.jpg",
+      position: { lat: -28.4508, lng: -52.2002 },
+    },
+    {
+      id: 2,
+      name: "Residencial Aurora",
+      address: "Av. Central, 1200",
+      rooms: 2,
+      bathrooms: 1,
+      area: "69m²",
+      description:
+        "O Residencial Aurora oferece conforto e praticidade em uma região excelente.",
+      image: "/imoveis/aurora.jpg",
+      position: { lat: -28.4521, lng: -52.201 },
+    },
+  ];
 
   return (
     <>
       <Navbar titulo="Imóveis" />
-      <div style={{ width: "100%", height: "100%" }}>
-        {isLoaded ? (
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={center}
-            zoom={12}
-            onClick={handleMapClick}
-          >
-            {markers.map(marker => (
-              <Marker
-                key={marker.id}
-                position={marker.position}
-                title={marker.title}
+
+      <div className="map-wrapper">
+        {isLoaded && (
+          <>
+            <GoogleMap
+              mapContainerStyle={containerStyle}
+              center={center}
+              zoom={14}
+            >
+              {properties.map((property) => (
+                <Marker
+                  key={property.id}
+                  position={property.position}
+                  onClick={() => setSelectedMarker(property)}
+                />
+              ))}
+            </GoogleMap>
+
+            {selectedMarker && (
+              <PropertyCard
+                marker={selectedMarker}
+                onClose={() => setSelectedMarker(null)}
               />
-            ))}
-          </GoogleMap>
-        ) : (
-          <Loading />
+            )}
+          </>
         )}
       </div>
     </>
   );
-};
+}
+
+
+
+
+
