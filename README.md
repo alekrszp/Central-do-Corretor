@@ -1,16 +1,10 @@
-Aqui está o código fonte completo em Markdown. Basta clicar no botão de copiar no canto superior do bloco de código e colar no seu arquivo README.md.
-
-Markdown
 
 # 🏢 Central do Corretor
 
 ![Badge React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Badge Google Maps](https://img.shields.io/badge/Google_Maps-4285F4?style=for-the-badge&logo=google-maps&logoColor=white)
-![Badge License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
 
 > Um sistema web completo para gestão imobiliária, focado na produtividade do corretor e na visualização estratégica de imóveis via geolocalização.
-
-![Dashboard Preview](https://via.placeholder.com/800x400?text=Preview+da+Central+do+Corretor)
 
 ## 📋 Sobre o Projeto
 
