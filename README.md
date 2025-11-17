@@ -1,65 +1,32 @@
-# Atitus Maps
+🏢 Central do Corretor
+Um sistema web completo para gestão imobiliária, focado na produtividade do corretor e na visualização estratégica de imóveis via geolocalização.
 
-## Sobre o Projeto
+📋 Sobre o Projeto
+A Central do Corretor é uma aplicação web desenvolvida em React que visa simplificar a rotina de corretores de imóveis e imobiliárias. O sistema permite o gerenciamento centralizado de todo o ciclo de vendas, desde a captação do imóvel e cadastro de clientes interessados, até o fechamento da venda.
 
-O **Atitus Maps** é uma aplicação web que permite visualizar e cadastrar pontos geográficos em um mapa interativo. Usuários autenticados podem adicionar novos pontos clicando no mapa, que são salvos em um backend e exibidos para todos.
+O diferencial do projeto é a integração com a Google Maps API, permitindo visualizar a carteira de imóveis em um mapa interativo, facilitando a identificação de oportunidades por região.
 
-## Como iniciar este exercício
+✨ Funcionalidades Principais
+🏠 Gestão de Imóveis: Cadastro, edição e listagem de imóveis com detalhes (fotos, valor, metragem, endereço).
 
-Clique em **Copiar Exercício** e abra o link em uma nova aba.
+👥 Controle de Clientes: Base de dados de clientes compradores e proprietários, com histórico de preferências.
 
-   <a id="copy-exercise" target="_blank" href="https://github.com/new?template_name=atitus-maps&template_owner=jaisonschmidt&name=atitus-maps&owner=%40me&visibility=public">
-      <img src="https://img.shields.io/badge/📠_Copiar_Exercício-008000" height="25pt"/>
-   </a>
+💰 Registro de Vendas: Acompanhamento de negociações e vendas concluídas.
 
-## Funcionalidades
+🗺️ Mapa Interativo: Visualização de pinos no mapa indicando a localização exata dos imóveis disponíveis (Integração Google Maps).
 
-- Visualização de pontos cadastrados no mapa.
-- Cadastro de novos pontos ao clicar no mapa.
-- Autenticação de usuários.
-- Integração com Google Maps.
+📊 Dashboard Resumo: Visão geral com contagem de imóveis ativos, vendas no mês e novos clientes.
 
-## Dependências
+🚀 Tecnologias Utilizadas
+React: Biblioteca principal para construção da interface.
 
-- [React](https://react.dev/)
-- [Vite](https://vitejs.dev/)
-- [@react-google-maps/api](https://www.npmjs.com/package/@react-google-maps/api)
-- [Axios](https://www.npmjs.com/package/axios)
+React Router: Para navegação entre as páginas (SPA).
 
-## Como rodar o projeto
+Google Maps API: Para renderização do mapa e geocodificação.
 
-1. **Clone o repositório:**
-   ```bash
-   git clone https://github.com/seu-usuario/atitus-maps.git
-   cd atitus-maps
-   ```
+Styled Components ou Tailwind CSS: Para estilização.
 
-2. **Instale as dependências:**
-   ```bash
-   npm install
-   ```
+Desenvolvedores:
+Alessandro Rosa, Pedro Scheurer, João Pedro Ferraresi e Pedro Dagneze.
 
-3. **Crie o arquivo `.env` na raiz do projeto:**
-   ```
-   VITE_GOOGLE_MAPS_API_KEY=sua_chave_google_maps_aqui
-   ```
 
-   > **Atenção:**  
-   > - O prefixo `VITE_` é obrigatório para variáveis de ambiente no Vite.
-   > - Não compartilhe sua chave de API publicamente.
-
-4. **Rode o projeto:**
-   ```bash
-   npm run dev
-   ```
-
-5. **Acesse no navegador:**  
-   Abra [http://localhost:5173](http://localhost:5173) para visualizar a aplicação.
-
-## Observações
-
-- Certifique-se de que sua chave do Google Maps tem permissão para uso em aplicações web.
-- O backend utilizado está disponível em:  
-  `https://passing-agatha-atitus-0ca94c8f.koyeb.app/ws/point`
-
----
