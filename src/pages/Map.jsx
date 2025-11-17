@@ -11,7 +11,7 @@ const containerStyle = {
 
 let center = { lat: -28.452, lng: -52.200 };
 
-export default function Map() {
+export function Map() {
   const [selectedMarker, setSelectedMarker] = useState(null);
 
   const { isLoaded } = useJsApiLoader({

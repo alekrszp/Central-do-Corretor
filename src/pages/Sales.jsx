@@ -1,4 +1,17 @@
+import { useState } from "react";
+import { SalesModal } from "../components";
+
 export function Sales() {
+    const [open, setOpen] = useState(false);
+
+    let numeroParcelas = [];
+
+    const parcelas = 72;
+    
+    for (let i = 0; i <= parcelas; i++ ) {
+        numeroParcelas.push(<option key={i}>{i}x</option>);
+    }
+
     return (
         <>
             <header class="w-full flex justify-between py-[28px] px-6 bg-gradient-to-r from-[#9392FF] to-[#A391FF] shadow-xl">
@@ -11,7 +24,7 @@ export function Sales() {
                 </p>
                 <div class="flex flex-col gap-12">
                     <div class="w-full flex justify-end">
-                        <button type="button" class="bg-gradient-to-r from-[#FBBC63] to-[#EFAB4B] py-1.5 px-7 rounded-full text-white font-medium">
+                        <button onClick={() => setOpen(true)} type="button" class="bg-gradient-to-r from-[#FBBC63] to-[#EFAB4B] py-1.5 px-7 rounded-full text-white font-medium">
                             + Nova Venda
                         </button>
                     </div>
@@ -56,6 +69,53 @@ export function Sales() {
                     </div>
                 </div>
             </main>
+            <SalesModal open={open} onClose={() => setOpen(false)}>
+                <div class="flex flex-col gap-2 items-center">
+                    <h1 class="text-3xl text-white font-semibold">Nova venda</h1>
+                    <form class="w-full flex flex-col gap-3">
+                        <div class="flex flex-col gap-1 w-full">
+                            <label for="imovel" class="text-white">Imóvel</label>
+                            <select id="imovel" name="imovel" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1">
+                                <option>João</option>
+                            </select>
+                        </div>
+                        <div class="flex flex-col gap-1 w-full">
+                            <label for="cliente" class="text-white">Cliente</label>
+                            <input type="text" id="cliente" name="cliente" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1" placeholder="Digite o nome do cliente"/>
+                        </div>
+                        <div class="flex flex-col gap-1 w-full">
+                            <label for="valor" class="text-white">Valor</label>
+                            <input type="text" id="valor" name="valor" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1" placeholder="Digite o valor"/>
+                        </div>
+                        <div class="flex flex-row gap-3 w-full">
+                            <div class="flex flex-col gap-1 w-full">
+                                <label for="parcelas" class="text-white">Nº de Parcelas</label>
+                                <select id="parcelas" name="parcelas" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1">
+                                    {numeroParcelas}
+                                </select>
+                            </div>
+                            <div class="flex flex-col gap-1 w-full">
+                                <label for="forma-pagamento" class="text-white">Forma de Pagamento</label>
+                                <select id="forma-pagamento" name="forma-pagamento" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1">
+                                    <option value="À vista">À vista</option>
+                                    <option value="Consórcio">Consórcio</option>
+                                    <option value="Permuta">Permuta</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="flex flex-row gap-3 w-full">
+                            <div class="flex flex-col gap-1 w-full">
+                                <label for="entrada" class="text-white">Entrada</label>
+                                <input id="entrada" name="entrada" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1"/>
+                            </div>
+                            <div class="flex flex-col gap-1 w-full">
+                                <label for="comissao" class="text-white">Comissão</label>
+                                <input id="comissao" name="comissao" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </SalesModal>
         </>
     );
 }
