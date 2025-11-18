@@ -12,6 +12,13 @@ export function Sales() {
         numeroParcelas.push(<option key={i}>{i}x</option>);
     }
 
+
+    const form = document.getElementById('sales-form');
+
+    function handleSubmit(e) {
+        e.preventDefault();
+    }
+
     return (
         <>
             <header class="w-full flex justify-between py-[28px] px-6 bg-gradient-to-r from-[#9392FF] to-[#A391FF] shadow-xl">
@@ -72,10 +79,10 @@ export function Sales() {
             <SalesModal open={open} onClose={() => setOpen(false)}>
                 <div class="flex flex-col gap-2 items-center">
                     <h1 class="text-3xl text-white font-semibold">Nova venda</h1>
-                    <form class="w-full flex flex-col gap-3">
+                    <form onSubmit={handleSubmit} class="w-full flex flex-col gap-3">
                         <div class="flex flex-col gap-1 w-full">
                             <label for="imovel" class="text-white">Imóvel</label>
-                            <select id="imovel" name="imovel" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1">
+                            <select id="imovel" name="imovel" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-3">
                                 <option>João</option>
                             </select>
                         </div>
@@ -90,13 +97,13 @@ export function Sales() {
                         <div class="flex flex-row gap-3 w-full">
                             <div class="flex flex-col gap-1 w-full">
                                 <label for="parcelas" class="text-white">Nº de Parcelas</label>
-                                <select id="parcelas" name="parcelas" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1">
+                                <select id="parcelas" name="parcelas" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-3">
                                     {numeroParcelas}
                                 </select>
                             </div>
                             <div class="flex flex-col gap-1 w-full">
                                 <label for="forma-pagamento" class="text-white">Forma de Pagamento</label>
-                                <select id="forma-pagamento" name="forma-pagamento" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1">
+                                <select id="forma-pagamento" name="forma-pagamento" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-3">
                                     <option value="À vista">À vista</option>
                                     <option value="Consórcio">Consórcio</option>
                                     <option value="Permuta">Permuta</option>
@@ -113,7 +120,9 @@ export function Sales() {
                                 <input id="comissao" name="comissao" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1"/>
                             </div>
                         </div>
+                        <button type="submit" class="bg-gradient-to-br from-[#C77DFF] to-[#CD8BFF] w-fit self-center text-white font-semibold rounded-lg px-4 py-1">Cadastrar</button>
                     </form>
+                    
                 </div>
             </SalesModal>
         </>
