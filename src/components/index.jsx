@@ -7,6 +7,7 @@ import { Title } from './Title';
 import { PrivateRoute } from './PrivateRoute';
 import { Loading } from './Loading';
 import { NavMenu } from './NavMenu';
+import { SalesModal } from './SalesModal';
 import { OverlayTitle } from "./OverlayTitle"
-export { Button, Input, Logo, Navbar, Navbar2, Title, PrivateRoute, Loading, NavMenu, OverlayTitle };
+export { Button, Input, Logo, Navbar, Navbar2, Title, PrivateRoute, Loading, NavMenu, SalesModal, OverlayTitle };
 
