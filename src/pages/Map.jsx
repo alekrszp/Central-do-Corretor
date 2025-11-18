@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navbar } from "../components";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
-import "./Map.css";
 
 const containerStyle = { width: "100%", height: "100vh" };
 const center = { lat: -28.452, lng: -52.200 };
@@ -74,7 +73,7 @@ export function Map() {
       } else {
         alert("Erro ao criar imóvel");
       }
-    } catch (err) {
+    } catch {
       alert("Erro ao criar imóvel");
     }
   }
@@ -83,7 +82,7 @@ export function Map() {
     <>
       <Navbar titulo="Imóveis" />
 
-      <div className="map-wrapper">
+      <div className="w-full h-screen relative">
         {isLoaded && (
           <>
             <GoogleMap
@@ -97,7 +96,6 @@ export function Map() {
                 })
               }
             >
-              {/* IMÓVEIS EXISTENTES */}
               {properties.map((p) => (
                 <Marker
                   key={p.id}
@@ -108,48 +106,54 @@ export function Map() {
                 />
               ))}
 
-              {/* MARCADOR DO CLIQUE */}
-              {clickedPosition && (
-                <Marker position={clickedPosition} />
-              )}
+              {clickedPosition && <Marker position={clickedPosition} />}
             </GoogleMap>
 
             {clickedPosition && (
-              <div className="modal-overlay">
-                <div className="form-container">
-                  <div className="form-header">
-                    <h2>Novo Imóvel</h2>
+              <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-20">
+                <div className="w-[420px] max-h-[85vh] bg-black/70 text-white p-6 rounded-2xl shadow-xl overflow-y-auto animate-fadeIn">
+                  
+                  <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-semibold">Novo Imóvel</h2>
                     <button
-                      className="close-btn"
+                      className="text-3xl leading-none hover:text-red-300"
                       onClick={() => setClickedPosition(null)}
                     >
                       ✕
                     </button>
                   </div>
 
-                  <form onSubmit={handleSubmit} className="form-body">
+                  <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                     <input
                       type="text"
                       placeholder="Nome"
+                      className="p-3 rounded-lg bg-white/20 placeholder-gray-300"
                       value={formData.nome}
                       onChange={(e) =>
                         setFormData({ ...formData, nome: e.target.value })
                       }
                       required
                     />
+
                     <input
                       type="text"
                       placeholder="Logradouro"
+                      className="p-3 rounded-lg bg-white/20 placeholder-gray-300"
                       value={formData.logradouro}
                       onChange={(e) =>
-                        setFormData({ ...formData, logradouro: e.target.value })
+                        setFormData({
+                          ...formData,
+                          logradouro: e.target.value,
+                        })
                       }
                       required
                     />
-                    <div className="form-row">
+
+                    <div className="flex gap-3">
                       <input
                         type="text"
                         placeholder="Número"
+                        className="p-3 rounded-lg bg-white/20 placeholder-gray-300 w-full"
                         value={formData.numero}
                         onChange={(e) =>
                           setFormData({ ...formData, numero: e.target.value })
@@ -159,6 +163,7 @@ export function Map() {
                       <input
                         type="text"
                         placeholder="Bairro"
+                        className="p-3 rounded-lg bg-white/20 placeholder-gray-300 w-full"
                         value={formData.bairro}
                         onChange={(e) =>
                           setFormData({ ...formData, bairro: e.target.value })
@@ -166,9 +171,11 @@ export function Map() {
                         required
                       />
                     </div>
+
                     <input
                       type="text"
                       placeholder="Complemento"
+                      className="p-3 rounded-lg bg-white/20 placeholder-gray-300"
                       value={formData.complemento}
                       onChange={(e) =>
                         setFormData({
@@ -177,19 +184,23 @@ export function Map() {
                         })
                       }
                     />
+
                     <input
                       type="text"
                       placeholder="CEP"
+                      className="p-3 rounded-lg bg-white/20 placeholder-gray-300"
                       value={formData.cep}
                       onChange={(e) =>
                         setFormData({ ...formData, cep: e.target.value })
                       }
                       required
                     />
-                    <div className="form-row">
+
+                    <div className="flex gap-3">
                       <input
                         type="text"
                         placeholder="Cidade"
+                        className="p-3 rounded-lg bg-white/20 placeholder-gray-300 w-full"
                         value={formData.cidade}
                         onChange={(e) =>
                           setFormData({ ...formData, cidade: e.target.value })
@@ -199,6 +210,7 @@ export function Map() {
                       <input
                         type="text"
                         placeholder="Estado"
+                        className="p-3 rounded-lg bg-white/20 placeholder-gray-300 w-full"
                         value={formData.estado}
                         onChange={(e) =>
                           setFormData({ ...formData, estado: e.target.value })
@@ -207,7 +219,10 @@ export function Map() {
                       />
                     </div>
 
-                    <button type="submit" className="submit-btn">
+                    <button
+                      type="submit"
+                      className="mt-2 bg-blue-500 hover:bg-blue-600 transition p-3 rounded-lg text-white font-medium"
+                    >
                       Criar imóvel
                     </button>
                   </form>
