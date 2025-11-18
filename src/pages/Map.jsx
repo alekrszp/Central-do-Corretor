@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navbar } from "../components";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { useAuth } from "../contexts/AuthContext";
 
 const containerStyle = { width: "100%", height: "100vh" };
 const center = { lat: -28.452, lng: -52.200 };
@@ -18,6 +19,8 @@ export function Map() {
     estado: "",
   });
   const [properties, setProperties] = useState([]);
+
+  const { token } = useAuth()
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
@@ -45,14 +48,17 @@ export function Map() {
 
     const dataToSend = {
       ...formData,
-      latitude: clickedPosition.lat,
-      longitude: clickedPosition.lng,
+      point: {
+        latitude: clickedPosition.lat,
+        longitude: clickedPosition.lng,
+      }
+
     };
 
     try {
       const res = await fetch("http://localhost:8080/ws/imovel", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify(dataToSend),
       });
 
@@ -112,7 +118,7 @@ export function Map() {
             {clickedPosition && (
               <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-20">
                 <div className="w-[420px] max-h-[85vh] bg-black/70 text-white p-6 rounded-2xl shadow-xl overflow-y-auto animate-fadeIn">
-                  
+
                   <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-semibold">Novo Imóvel</h2>
                     <button
