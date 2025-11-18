@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./navbar.css";
 import { NavMenu, OverlayTitle } from "../index";
 
 export function Navbar({ titulo, user }) {
@@ -13,30 +12,90 @@ export function Navbar({ titulo, user }) {
     <>
       {isNavMenuOpen && <NavMenu closeNav={handleNavStateClick} />}
 
-      <header className="navbar">
-        <div className="nav-top">
-          <div className="nav-left">
+      <header
+        className="
+        w-full 
+        px-[18px] pt-[30px] pb-[14px]
+        flex flex-col gap-3
+        text-white
+        bg-gradient-to-b from-[#9d77ff] to-[#8a5bff]
+        font-sans
+        box-border
+      "
+      >
+        {/* TOP */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5 min-w-0">
             <img
-              src={user?.foto ?? "/icon.png"}
+              src={user?.foto ?? '/icon.png'}
               alt="avatar"
-              className="nav-user-photo"
+              className="w-[38px] h-[38px] rounded-full object-cover shrink-0"
             />
-            <div className="nav-username">{user?.nome ?? "Josué Bueno"}</div>
+
+            <div
+              className="
+                text-[20px] font-bold
+                whitespace-nowrap overflow-hidden text-ellipsis
+                ml-[6px] leading-none
+                max-[420px]:text-[18px]
+              "
+            >
+              {user?.nome ?? "Josué Bueno"}
+            </div>
           </div>
 
-          <button className="nav-menu-btn" onClick={handleNavStateClick}>
+          <button
+            className="
+              text-[26px] 
+              bg-transparent border-none text-white
+              p-[6px] leading-none cursor-pointer
+            "
+            onClick={handleNavStateClick}
+          >
             ☰
           </button>
         </div>
 
-        <div className="nav-search-container">
-          <img src="/search.png" className="nav-icon lupa" alt="search" />
+        {/* SEARCH */}
+        <div
+          className="
+            w-full
+            bg-white/20
+            rounded-[20px]
+            px-[12px] py-[9px]
+            flex items-center gap-[10px]
+            box-border
+          "
+        >
+          <img
+            src="/search.png"
+            alt="search"
+            className="
+              opacity-90 shrink-0
+              w-[26px] h-[26px]
+              max-[420px]:w-[22px] max-[420px]:h-[22px]
+            "
+          />
+
           <input
             type="text"
-            className="nav-input"
             placeholder="Pesquisar Imóvel..."
+            className="
+              bg-transparent border-none outline-none
+              text-white text-[14px]
+              w-full py-[6px]
+              placeholder:text-white/85
+            "
           />
-          <img src="/mic.png" className="nav-icon" alt="mic" />
+
+          <img
+            src="/mic.png"
+            alt="mic"
+            className="
+            w-6! h-6!
+              opacity-90 shrink-0
+            "
+          />
         </div>
       </header>
 
@@ -44,9 +103,3 @@ export function Navbar({ titulo, user }) {
     </>
   );
 }
-
-
-
-
-
-
