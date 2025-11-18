@@ -8,8 +8,8 @@ export function Sales() {
 
     const parcelas = 72;
     
-    for (let i = 0; i <= parcelas; i++ ) {
-        numeroParcelas.push(<option key={i}>{i}x</option>);
+    for (let i = 1; i <= parcelas; i++ ) {
+        numeroParcelas.push(<option key={i} value={i}>{i}x</option>);
     }
 
 
