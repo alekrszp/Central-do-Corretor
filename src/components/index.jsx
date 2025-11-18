@@ -9,5 +9,10 @@ import { Loading } from './Loading';
 import { NavMenu } from './NavMenu';
 import { SalesModal } from './SalesModal';
 import { OverlayTitle } from "./OverlayTitle"
-export { Button, Input, Logo, Navbar, Navbar2, Title, PrivateRoute, Loading, NavMenu, SalesModal, OverlayTitle };
+import { DeleteImovel } from './DeleteImovel';
+import { SelectedImovel } from './SelectedImovel';
+import { CadastroImovel } from './CadastroImovel';
+import { ErroModal } from './ErroModal';
+export { Button, Input, Logo, Navbar, Navbar2, Title, PrivateRoute, Loading, 
+    NavMenu, SalesModal, OverlayTitle, DeleteImovel, SelectedImovel, CadastroImovel, ErroModal };
 
