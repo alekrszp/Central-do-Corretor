@@ -14,16 +14,17 @@ export function Navbar({ titulo, user }) {
 
       <header
         className="
+        fixed top-0 left-0 z-50        
         w-full 
         px-[18px] pt-[30px] pb-[14px]
         flex flex-col gap-3
         text-white
-        bg-gradient-to-b from-[#9d77ff] to-[#8a5bff]
+        bg-gradient-to-b from-[#7B61FF] to-[#A391FF]
         font-sans
         box-border
+        shadow-md
       "
       >
-        {/* TOP */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5 min-w-0">
             <img
@@ -56,7 +57,6 @@ export function Navbar({ titulo, user }) {
           </button>
         </div>
 
-        {/* SEARCH */}
         <div
           className="
             w-full
@@ -72,7 +72,7 @@ export function Navbar({ titulo, user }) {
             alt="search"
             className="
               opacity-90 shrink-0
-              w-[26px] h-[26px]
+              w-8! h-6!
               max-[420px]:w-[22px] max-[420px]:h-[22px]
             "
           />
@@ -92,14 +92,16 @@ export function Navbar({ titulo, user }) {
             src="/mic.png"
             alt="mic"
             className="
-            w-6! h-6!
+              w-6! h-6!
               opacity-90 shrink-0
             "
           />
         </div>
       </header>
 
-      <OverlayTitle>{titulo}</OverlayTitle>
+      <div className="mt-[140px] relative z-40 pointer-events-none">
+         <OverlayTitle>{titulo}</OverlayTitle>
+      </div>
     </>
   );
 }
