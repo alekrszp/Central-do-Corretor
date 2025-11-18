@@ -5,6 +5,20 @@ import { Loading } from "../components/Loading";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { useAuth } from "../contexts/AuthContext";
 
+const formatBRL = (value) => {
+  if (!value) return "R$ 0,00";
+  const numericValue = typeof value === 'string' ? parseFloat(value) : value;
+  
+  if (isNaN(numericValue)) return "R$ N/A";
+
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(numericValue);
+};
+
 const containerStyle = { width: "100%", height: "100vh" };
 const center = { lat: -28.452, lng: -52.200 };
 
@@ -64,6 +78,10 @@ export function Map() {
   const handleTextChange = (e, field) => {
     const value = e.target.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
     setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleAnyChange = (e, field) => {
+    setFormData((prev) => ({ ...prev, [field]: e.target.value }));
   };
 
   const handleNumberChange = (e, field) => {
@@ -170,6 +188,7 @@ export function Map() {
                 quartos: formData.quartos,
                 banheiros: formData.banheiros,
                 area: formData.area,
+                valor: formData.valor,
                 descricao: formData.observacoes,
             };
 
@@ -312,7 +331,7 @@ export function Map() {
                     overflow-hidden
                     transition-all duration-500 cubic-bezier(0.4, 0, 0.2, 1)
                     p-6
-                    ${isExpanded ? 'max-h-[600px]' : 'max-h-[180px]'} 
+                    ${isExpanded ? 'max-h-[600px]' : 'max-h-[220px]'} 
                   `}
                   onClick={(e) => e.stopPropagation()}
                 >
@@ -338,8 +357,11 @@ export function Map() {
                     <h2 className="text-xl font-bold text-white mb-1">
                       {selectedProperty.nome}
                     </h2>
-                    <p className="text-gray-300 text-sm font-medium">
+                    <p className="text-gray-300 text-sm font-medium mb-2">
                       {selectedProperty.bairro}, {selectedProperty.numero}
+                    </p>
+                    <p className="text-[#6A4BFF] text-2xl font-extrabold mb-3">
+                        {formatBRL(selectedProperty.valor)}
                     </p>
                   </div>
 
@@ -426,85 +448,85 @@ export function Map() {
                        </div>
 
                        <div>
-                            <label className="block text-sm font-bold mb-1 ml-1 text-gray-200">Valor</label>
-                            <input 
-                                type="text" 
-                                placeholder="R$ 00,00" 
-                                className="p-3 rounded-xl bg-white/5 border border-white/10 placeholder-gray-400 text-white w-full text-lg focus:outline-none focus:ring-2 focus:ring-[#7B61FF] transition-all" 
-                                value={formData.valor} 
-                                onChange={(e) => handleNumberChange(e, 'valor')} 
-                            />
+                           <label className="block text-sm font-bold mb-1 ml-1 text-gray-200">Valor</label>
+                           <input 
+                               type="text" 
+                               placeholder="R$ 00,00" 
+                               className="p-3 rounded-xl bg-white/5 border border-white/10 placeholder-gray-400 text-white w-full text-lg focus:outline-none focus:ring-2 focus:ring-[#7B61FF] transition-all" 
+                               value={formData.valor} 
+                               onChange={(e) => handleNumberChange(e, 'valor')} 
+                           />
                        </div>
 
                        <div className="flex gap-4">
-                            <div className="w-1/2">
-                                <label className="block text-sm font-bold mb-1 ml-1 text-gray-200">Tipo</label>
-                                <div className="relative">
-                                    <select 
-                                        className="p-3 rounded-xl bg-white/5 border border-white/10 text-white w-full appearance-none focus:outline-none focus:ring-2 focus:ring-[#7B61FF] transition-all"
-                                        value={formData.tipo}
-                                        onChange={(e) => setFormData({ ...formData, tipo: e.target.value })}
-                                    >
-                                        <option value="Casa" className="bg-gray-800 text-white">Casa</option>
-                                        <option value="Apartamento" className="bg-gray-800 text-white">Apartamento</option>
-                                        <option value="Terreno" className="bg-gray-800 text-white">Terreno</option>
-                                    </select>
-                                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white">
-                                        <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="w-1/2">
-                                <label className="block text-sm font-bold mb-1 ml-1 text-gray-200">m²</label>
-                                <input 
-                                    type="text" 
-                                    placeholder="Digite..." 
-                                    className="p-3 rounded-xl bg-white/5 border border-white/10 placeholder-gray-400 text-white w-full focus:outline-none focus:ring-2 focus:ring-[#7B61FF] transition-all" 
-                                    value={formData.area} 
-                                    onChange={(e) => handleNumberChange(e, 'area')} 
-                                />
-                            </div>
+                           <div className="w-1/2">
+                               <label className="block text-sm font-bold mb-1 ml-1 text-gray-200">Tipo</label>
+                               <div className="relative">
+                                   <select 
+                                           className="p-3 rounded-xl bg-white/5 border border-white/10 text-white w-full appearance-none focus:outline-none focus:ring-2 focus:ring-[#7B61FF] transition-all"
+                                           value={formData.tipo}
+                                           onChange={(e) => setFormData({ ...formData, tipo: e.target.value })}
+                                   >
+                                           <option value="Casa" className="bg-gray-800 text-white">Casa</option>
+                                           <option value="Apartamento" className="bg-gray-800 text-white">Apartamento</option>
+                                           <option value="Terreno" className="bg-gray-800 text-white">Terreno</option>
+                                   </select>
+                                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-white">
+                                           <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                   </div>
+                               </div>
+                           </div>
+                           <div className="w-1/2">
+                               <label className="block text-sm font-bold mb-1 ml-1 text-gray-200">m²</label>
+                               <input 
+                                   type="text" 
+                                   placeholder="Digite..." 
+                                   className="p-3 rounded-xl bg-white/5 border border-white/10 placeholder-gray-400 text-white w-full focus:outline-none focus:ring-2 focus:ring-[#7B61FF] transition-all" 
+                                   value={formData.area} 
+                                   onChange={(e) => handleNumberChange(e, 'area')} 
+                               />
+                           </div>
                        </div>
 
                        {formData.tipo !== "Terreno" && (
                            <div className="flex gap-4">
-                                <div className="w-1/2">
-                                    <label className="block text-sm font-bold mb-1 ml-1 text-gray-200">Nº banheiros</label>
-                                    <input 
-                                        type="number" 
-                                        placeholder="Qtd" 
-                                        className="p-3 rounded-xl bg-white/5 border border-white/10 placeholder-gray-400 text-white w-full focus:outline-none focus:ring-2 focus:ring-[#7B61FF] transition-all" 
-                                        value={formData.banheiros} 
-                                        onChange={(e) => handleNumberChange(e, 'banheiros')} 
-                                    />
-                                </div>
-                                <div className="w-1/2">
-                                    <label className="block text-sm font-bold mb-1 ml-1 text-gray-200">Nº quartos</label>
-                                    <input 
-                                        type="number" 
-                                        placeholder="Qtd" 
-                                        className="p-3 rounded-xl bg-white/5 border border-white/10 placeholder-gray-400 text-white w-full focus:outline-none focus:ring-2 focus:ring-[#7B61FF] transition-all" 
-                                        value={formData.quartos} 
-                                        onChange={(e) => handleNumberChange(e, 'quartos')} 
-                                    />
-                                </div>
+                               <div className="w-1/2">
+                                   <label className="block text-sm font-bold mb-1 ml-1 text-gray-200">Nº banheiros</label>
+                                   <input 
+                                       type="number" 
+                                       placeholder="Qtd" 
+                                       className="p-3 rounded-xl bg-white/5 border border-white/10 placeholder-gray-400 text-white w-full focus:outline-none focus:ring-2 focus:ring-[#7B61FF] transition-all" 
+                                       value={formData.banheiros} 
+                                       onChange={(e) => handleNumberChange(e, 'banheiros')} 
+                                   />
+                               </div>
+                               <div className="w-1/2">
+                                   <label className="block text-sm font-bold mb-1 ml-1 text-gray-200">Nº quartos</label>
+                                   <input 
+                                       type="number" 
+                                       placeholder="Qtd" 
+                                       className="p-3 rounded-xl bg-white/5 border border-white/10 placeholder-gray-400 text-white w-full focus:outline-none focus:ring-2 focus:ring-[#7B61FF] transition-all" 
+                                       value={formData.quartos} 
+                                       onChange={(e) => handleNumberChange(e, 'quartos')} 
+                                   />
+                               </div>
                            </div>
                        )}
 
                        <div>
-                            <label className="block text-sm font-bold mb-1 ml-1 text-gray-200">Observações</label>
-                            <textarea 
-                                rows="3"
-                                placeholder="Digite a observação" 
-                                className="p-3 rounded-xl bg-white/5 border border-white/10 placeholder-gray-400 text-white w-full resize-none focus:outline-none focus:ring-2 focus:ring-[#7B61FF] transition-all" 
-                                value={formData.observacoes} 
-                                onChange={(e) => handleTextChange(e, 'observacoes')} 
-                            />
+                           <label className="block text-sm font-bold mb-1 ml-1 text-gray-200">Observações</label>
+                           <textarea 
+                               rows="3"
+                               placeholder="Digite a observação" 
+                               className="p-3 rounded-xl bg-white/5 border border-white/10 placeholder-gray-400 text-white w-full resize-none focus:outline-none focus:ring-2 focus:ring-[#7B61FF] transition-all" 
+                               value={formData.observacoes} 
+                               onChange={(e) => handleAnyChange(e, 'observacoes')} 
+                           />
                        </div>
                        
                        <button 
-                        type="submit" 
-                        className="mt-2 w-full bg-[#7B61FF] hover:bg-[#6A4BFF] transition-all p-3.5 rounded-xl text-white font-bold shadow-lg hover:shadow-[#7B61FF]/40"
+                       type="submit" 
+                       className="mt-2 w-full bg-[#7B61FF] hover:bg-[#6A4BFF] transition-all p-3.5 rounded-xl text-white font-bold shadow-lg hover:shadow-[#7B61FF]/40"
                        >
                         Cadastrar
                        </button>
