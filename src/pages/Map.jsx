@@ -145,10 +145,8 @@ export function Map() {
     try {
       const res = await api.post("/imovel", {
         ...formData,
-        point: {
-          latitude: clickedPosition.lat,
-          longitude: clickedPosition.lng,
-        },
+        latitude: clickedPosition.lat,
+        longitude: clickedPosition.lng,
       });
 
       setProperties((prev) => [...prev, res.data]);
@@ -167,9 +165,9 @@ export function Map() {
       <Navbar titulo="Imóveis" />
       {isLoading && <Loading />}
       {erro && (
-        <ErroModal open={erro} onClose={()=>{setErro(null)}}>
-            <h2 className="text-xl font-bold text-red-300 mb-2">Erro</h2>
-            <p className="text-white">{erro?.response?.data?.message || erro?.message}</p>
+        <ErroModal open={erro} onClose={() => { setErro(null) }}>
+          <h2 className="text-xl font-bold text-red-300 mb-2">Erro</h2>
+          <p className="text-white">{erro?.response?.data?.message || erro?.message}</p>
         </ErroModal>)}
 
       <div className="w-full h-screen relative bg-[#121212]">
@@ -191,7 +189,7 @@ export function Map() {
               return (
                 <Marker
                   key={p.id}
-                  position={{ lat: Number(p.latitude), lng: Number(p.longitude) }}
+                  position={{ lat: Number(p.point.latitude), lng: Number(p.point.longitude) }}
                   onClick={(e) => handleMarkerClick(e, p)}
                   icon={{
                     url: isSelected ? PIN_ROXO_PATH : PIN_PRETO_PATH,

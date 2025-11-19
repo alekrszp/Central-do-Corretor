@@ -110,7 +110,7 @@ export function CadastroImovel({ handleChange,
                         rows="3"
                         placeholder="Digite a observação"
                         className="p-3 rounded-xl bg-white/5 border border-white/10 placeholder-gray-400 text-white w-full resize-none focus:outline-none focus:ring-2 focus:ring-[#7B61FF] transition-all"
-                        value={formData.observacoes}
+                        value={formData.descricao}
                         name='descricao'
                         onChange={(e) => handleChange(e)}
                     />
