@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { Navbar, Loading, DeleteImovel, SelectedImovel, CadastroImovel, ErroModal } from "../components";
 import { useAuth } from "../contexts/AuthContext";
@@ -16,18 +16,7 @@ const PIN_PRETO_PATH = "/pino1.png";
 const PIN_ROXO_PATH = "/pino2.png";
 
 const initialFormState = {
-  nome: "",
-  logradouro: "",
-  numero: "",
-  bairro: "",
-  complemento: "",
-  cep: "",
-  cidade: "",
-  estado: "",
-  valor: "",
-  tipo: "Casa",
-  area: "",
-  descricao: ""
+  nome: "", logradouro: "", numero: "", bairro: "", complemento: "", cep: "", cidade: "", estado: "", valor: "", tipo: "Casa", area: "", descricao: ""
 };
 
 export function Map() {
@@ -38,12 +27,17 @@ export function Map() {
   const [isClosing, setIsClosing] = useState(false);
   const [deleteTargetId, setDeleteTargetId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [erro, setErro] = useState(null)
-
+  const [erro, setErro] = useState(null);
   const [formData, setFormData] = useState(initialFormState);
+
+  const mapRef = useRef(null);
 
   const { token } = useAuth();
   const { isLoaded } = useJsApiLoader({ googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY });
+
+  const onMapLoad = useCallback((map) => {
+    mapRef.current = map;
+  }, []);
 
   useEffect(() => {
     async function loadData() {
@@ -52,7 +46,7 @@ export function Map() {
         const res = await api.get("/imovel");
         setProperties(res.data);
       } catch (error) {
-        console.error("Erro ao carregar imóveis:", error);
+        console.error(error);
       } finally {
         setIsLoading(false);
       }
@@ -62,19 +56,30 @@ export function Map() {
     }
   }, [token]);
 
+  const handleSelectImovel = useCallback((imovelSelecionado) => {
+    if (clickedPosition) handleCloseForm();
+
+    const imovelCompleto = properties.find(p => p.id === imovelSelecionado.id) || imovelSelecionado;
+
+    if (mapRef.current && imovelCompleto.point) {
+        mapRef.current.panTo({
+            lat: Number(imovelCompleto.point.latitude),
+            lng: Number(imovelCompleto.point.longitude)
+        });
+        mapRef.current.setZoom(17);
+    }
+
+    setSelectedProperty(imovelCompleto);
+    setIsExpanded(false);
+    setIsClosing(false);
+
+  }, [properties, clickedPosition]);
+
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-
     let newValue = value;
-
-    if (["nome", "logradouro", "bairro", "complemento", "cidade", "estado"].includes(name)) {
-      newValue = value.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
-    }
-
-    if (["numero", "cep", "valor", "area"].includes(name)) {
-      newValue = value.replace(/\D/g, "");
-    }
-
+    if (["nome", "logradouro", "bairro", "complemento", "cidade", "estado"].includes(name)) newValue = value.replace(/[^a-zA-ZÀ-ÿ\s]/g, "");
+    if (["numero", "cep", "valor", "area"].includes(name)) newValue = value.replace(/\D/g, "");
     setFormData((prev) => ({ ...prev, [name]: newValue }));
   }, []);
 
@@ -102,9 +107,7 @@ export function Map() {
 
   const handleMarkerClick = useCallback((e, property) => {
     e.domEvent.stopPropagation();
-
     if (clickedPosition) handleCloseForm();
-
     if (selectedProperty?.id === property.id) {
       closeCard();
     } else {
@@ -125,7 +128,6 @@ export function Map() {
   const confirmDelete = useCallback(async () => {
     if (!deleteTargetId) return;
     setIsLoading(true);
-
     try {
       await api.delete(`/imovel/${deleteTargetId}`);
       setProperties((prev) => prev.filter((p) => p.id !== deleteTargetId));
@@ -134,36 +136,34 @@ export function Map() {
       setIsLoading(false);
       closeCard();
     }
-  }, [deleteTargetId]);
+  }, [deleteTargetId, closeCard]);
 
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     if (!clickedPosition) return;
-
     setIsLoading(true);
-
     try {
       const res = await api.post("/imovel", {
         ...formData,
         latitude: clickedPosition.lat,
         longitude: clickedPosition.lng,
       });
-
       setProperties((prev) => [...prev, res.data]);
       handleCloseForm();
     } catch (error) {
       handleCloseForm();
       setErro(error)
-    }
-    finally {
+    } finally {
       setIsLoading(false);
     }
-  }, [clickedPosition, formData]);
+  }, [clickedPosition, formData, handleCloseForm]);
 
   return (
     <>
-      <Navbar titulo="Imóveis" />
+      <Navbar titulo="Imóveis" onSelectImovel={handleSelectImovel} />
+      
       {isLoading && <Loading />}
+      
       {erro && (
         <ErroModal open={erro} onClose={() => { setErro(null) }}>
           <h2 className="text-xl font-bold text-red-300 mb-2">Erro</h2>
@@ -176,6 +176,7 @@ export function Map() {
             mapContainerStyle={containerStyle}
             center={center}
             zoom={14}
+            onLoad={onMapLoad}
             onClick={handleMapClick}
             options={{
               disableDefaultUI: true,
@@ -185,7 +186,6 @@ export function Map() {
           >
             {properties.map((p) => {
               const isSelected = selectedProperty?.id === p.id;
-
               return (
                 <Marker
                   key={p.id}
@@ -200,23 +200,27 @@ export function Map() {
               );
             })}
 
-            {deleteTargetId && <DeleteImovel setDeleteTargetIdNull={() => setDeleteTargetId(null)}
-              confirmDelete={confirmDelete} />}
+            {deleteTargetId && <DeleteImovel setDeleteTargetIdNull={() => setDeleteTargetId(null)} confirmDelete={confirmDelete} />}
 
-            {selectedProperty && <SelectedImovel isExpanded={isExpanded} isClosing={isClosing} selectedProperty={selectedProperty}
-              closeCard={closeCard} handleSobreClick={handleSobreClick} requestDelete={requestDelete} />}
+            {selectedProperty && (
+                <SelectedImovel 
+                    isExpanded={isExpanded} 
+                    isClosing={isClosing} 
+                    selectedProperty={selectedProperty}
+                    closeCard={closeCard} 
+                    handleSobreClick={handleSobreClick} 
+                    requestDelete={requestDelete} 
+                />
+            )}
 
             {clickedPosition && (
               <>
                 <Marker position={clickedPosition} icon={{ url: PIN_PRETO_PATH, scaledSize: new window.google.maps.Size(32, 32), anchor: new window.google.maps.Point(16, 32) }} />
-
                 <CadastroImovel handleChange={handleChange} handleSubmit={handleSubmit}
                   handleCloseForm={handleCloseForm}
                   formData={formData} setFormData={setFormData} />
-
               </>
             )}
-
           </GoogleMap>
         )}
       </div>

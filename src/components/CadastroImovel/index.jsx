@@ -33,9 +33,15 @@ export function CadastroImovel({ handleChange,
                         <input type="text" placeholder="Cidade" className="p-3 rounded-xl bg-white/5 border border-white/10 placeholder-gray-400 text-white w-full focus:outline-none focus:ring-2 focus:ring-[#7B61FF] transition-all" value={formData.cidade} name='cidade' onChange={(e) => handleChange(e)} required />
                         <input type="text" placeholder="Estado" className="p-3 rounded-xl bg-white/5 border border-white/10 placeholder-gray-400 text-white w-1/3 focus:outline-none focus:ring-2 focus:ring-[#7B61FF] transition-all" value={formData.estado} name='estado' onChange={(e) => handleChange(e)} required />
                     </div>
-                    <input type="text" placeholder="Complemento" className="p-3 rounded-xl bg-white/5 border border-white/10 placeholder-gray-400 text-white w-full focus:outline-none focus:ring-2 focus:ring-[#7B61FF] transition-all" value={formData.complemento} name='complemento' onChange={(e) => handleChange(e)} />
-                </div>
-
+                        <input 
+                type="text" 
+                placeholder="Complemento" 
+                className="p-3 rounded-xl bg-white/5 border border-white/10 placeholder-gray-400 text-white w-full focus:outline-none focus:ring-2 focus:ring-[#7B61FF] transition-all" 
+                value={formData.complemento} 
+                name="complemento" 
+                onChange={(e) => setFormData({ ...formData, complemento: e.target.value })} 
+                />
+            </div>
                 <div>
                     <label className="block text-sm font-bold mb-1 ml-1 text-gray-200">Valor</label>
                     <input

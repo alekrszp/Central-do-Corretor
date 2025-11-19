@@ -13,6 +13,7 @@ import { DeleteImovel } from './DeleteImovel';
 import { SelectedImovel } from './SelectedImovel';
 import { CadastroImovel } from './CadastroImovel';
 import { ErroModal } from './ErroModal';
+export * from './PasswordRequirements';
 export { Button, Input, Logo, Navbar, Navbar2, Title, PrivateRoute, Loading, 
     NavMenu, SalesModal, OverlayTitle, DeleteImovel, SelectedImovel, CadastroImovel, ErroModal };
 
