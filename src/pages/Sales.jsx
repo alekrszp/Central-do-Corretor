@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SalesModal } from "../components";
+import { CreateModal, Navbar } from "../components";
 
 export function Sales() {
     const [open, setOpen] = useState(false);
@@ -12,7 +12,6 @@ export function Sales() {
         numeroParcelas.push(<option key={i} value={i}>{i}x</option>);
     }
 
-
     const form = document.getElementById('sales-form');
 
     function handleSubmit(e) {
@@ -21,17 +20,11 @@ export function Sales() {
 
     return (
         <>
-            <header class="w-full flex justify-between py-[28px] px-6 bg-gradient-to-r from-[#9392FF] to-[#A391FF] shadow-xl">
-                <button class="font-semibold text-white text-lg">☰</button>
-                <h1 class="font-semibold text-white">Central Do Corretor</h1>
-            </header>
-            <main class="w-full flex flex-col gap-6 px-6 py-4">
-                <p class="w-full bg-gradient-to-r from-[#262626] to-[#353535] text-white text-lg font-semibold rounded-2xl py-3 text-center">
-                    Clientes
-                </p>
+            <Navbar titulo="Vendas" />
+            <main class="w-full flex flex-col gap-6 px-6 pt-28 pb-4">
                 <div class="flex flex-col gap-12">
                     <div class="w-full flex justify-end">
-                        <button onClick={() => setOpen(true)} type="button" class="bg-gradient-to-r from-[#FBBC63] to-[#EFAB4B] py-1.5 px-7 rounded-full text-white font-medium">
+                        <button onClick={() => setOpen(true)} type="button" class="bg-linear-to-r from-[#FBBC63] to-[#EFAB4B] py-1.5 px-7 rounded-full text-white font-semibold">
                             + Nova Venda
                         </button>
                     </div>
@@ -76,7 +69,7 @@ export function Sales() {
                     </div>
                 </div>
             </main>
-            <SalesModal open={open} onClose={() => setOpen(false)}>
+            <CreateModal open={open} onClose={() => setOpen(false)} containerClass="mt-46">
                 <div class="flex flex-col gap-2 items-center">
                     <h1 class="text-3xl text-white font-semibold">Nova venda</h1>
                     <form onSubmit={handleSubmit} class="w-full flex flex-col gap-3">
@@ -97,13 +90,13 @@ export function Sales() {
                         <div class="flex flex-row gap-3 w-full">
                             <div class="flex flex-col gap-1 w-full">
                                 <label for="parcelas" class="text-white">Nº de Parcelas</label>
-                                <select id="parcelas" name="parcelas" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-3">
+                                <select id="parcelas" name="parcelas" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-3 w-full">
                                     {numeroParcelas}
                                 </select>
                             </div>
                             <div class="flex flex-col gap-1 w-full">
                                 <label for="forma-pagamento" class="text-white">Forma de Pagamento</label>
-                                <select id="forma-pagamento" name="forma-pagamento" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-3">
+                                <select id="forma-pagamento" name="forma-pagamento" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-3 w-full">
                                     <option value="À vista">À vista</option>
                                     <option value="Consórcio">Consórcio</option>
                                     <option value="Permuta">Permuta</option>
@@ -113,18 +106,18 @@ export function Sales() {
                         <div class="flex flex-row gap-3 w-full">
                             <div class="flex flex-col gap-1 w-full">
                                 <label for="entrada" class="text-white">Entrada</label>
-                                <input id="entrada" name="entrada" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1"/>
+                                <input id="entrada" name="entrada" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1 w-full" placeholder="Valor de entrada"/>
                             </div>
                             <div class="flex flex-col gap-1 w-full">
                                 <label for="comissao" class="text-white">Comissão</label>
-                                <input id="comissao" name="comissao" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1"/>
+                                <input id="comissao" name="comissao" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1 w-full" placeholder="Valor de comissão"/>
                             </div>
                         </div>
                         <button type="submit" class="bg-gradient-to-br from-[#C77DFF] to-[#CD8BFF] w-fit self-center text-white font-semibold rounded-lg px-4 py-1">Cadastrar</button>
                     </form>
                     
                 </div>
-            </SalesModal>
+            </CreateModal>
         </>
     );
 }

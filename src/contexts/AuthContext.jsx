@@ -8,11 +8,13 @@ export function useAuth() {
   return useContext(AuthContext);
 }
 
+const DUMMY_TOKEN = 'token_falso_para_teste_12345';
+
 // Provider do contexto
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => {
     // Busca token do sessionStorage ao iniciar
-    return sessionStorage.getItem("token") || null;
+    return sessionStorage.getItem("token") || DUMMY_TOKEN;
   });
 
   // Salva no sessionStorage sempre que token mudar

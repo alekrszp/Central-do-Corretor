@@ -30,8 +30,8 @@ export function NavMenu({ closeNav }) {
 
                 <div className="flex flex-col gap-y-5 px-[30px] pb-5 border-b border-white/30">
                     <button onClick={() => navigate("/map")} className="text-left text-2xl font-bold hover:opacity-80 pt-2.5">Imóveis</button>
-                    <button onClick={() => navigate("/vendas")} className="text-left text-2xl font-bold hover:opacity-80">Vendas</button>
-                    <button onClick={() => navigate("/clientes")} className="text-left text-2xl font-bold hover:opacity-80">Clientes</button>
+                    <button onClick={() => navigate("/sales")} className="text-left text-2xl font-bold hover:opacity-80">Vendas</button>
+                    <button onClick={() => navigate("/clients")} className="text-left text-2xl font-bold hover:opacity-80">Clientes</button>
                 </div>
 
                 <div className="px-[30px] pt-5 pb-5 border-b border-white/30">

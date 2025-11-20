@@ -4,7 +4,7 @@ import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { Map } from "./pages/Map";
 import { Sales } from "./pages/Sales";
-import { CreateSales } from "./pages/CreateSales";
+import { Clients } from "./pages/Clients";
 import { PrivateRoute, Logo } from "./components/index";
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
           <Route path="register" element={<Register />} />
         </Route>
         <Route path="/sales" element={<Sales />} />
-        <Route path="/create/sales" element={<CreateSales />} />
+        <Route path="/clients" element={<Clients />} />
         <Route
           path="/map"
           element={
