@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-    baseURL: "http://localhost:8080/ws",
+    baseURL: "https://civic-sarajane-pedroscheurer-fd914fc3.koyeb.app/ws",
 });
 
 api.interceptors.request.use((config) => {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://ripe-donella-atitus-fbbf314a.koyeb.app/auth';
+const API_URL = 'https://civic-sarajane-pedroscheurer-fd914fc3.koyeb.app/auth';
 
 export async function signIn(email, password) {
   try {
@@ -8,12 +8,7 @@ export async function signIn(email, password) {
     return response.data;
   } catch (error) {
     if (error.response) {
-      if (error.response.status === 400) {
-        throw new Error('Requisição inválida.');
-      }
-      if (error.response.status === 401) {
-        throw new Error('Usuário ou senha incorretos.');
-      }
+      throw new Error('E-mail ou senha incorretos.');
     }
     throw new Error('Erro ao autenticar.');
   }

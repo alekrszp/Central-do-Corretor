@@ -1,9 +1,35 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { CreateModal, Navbar } from "../components";
 
 export function Sales() {
     const [open, setOpen] = useState(false);
 
+    const [imoveis, setImoveis] = useState([]);
+
+    useEffect(() => {
+
+        const token = sessionStorage.getItem("token");
+
+        if (!token) return;
+
+        async function carregarImoveis() {
+            try {
+                const resposta = await fetch("https://civic-sarajane-pedroscheurer-fd914fc3.koyeb.app/ws/imovel", {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                });
+                const dados = await resposta.json();
+                setImoveis(dados);
+            } catch (error) {
+                console.error("Erro ao buscar imóveis:", error);
+            }
+        }
+
+        carregarImoveis();
+    }, []);
+    
     let numeroParcelas = [];
 
     const parcelas = 72;
@@ -12,10 +38,12 @@ export function Sales() {
         numeroParcelas.push(<option key={i} value={i}>{i}x</option>);
     }
 
-    const form = document.getElementById('sales-form');
+    const formRef = useRef(null);
 
     function handleSubmit(e) {
         e.preventDefault();
+        const fields = new FormData(formRef.current);
+        console.log("Cliente:", fields.get("cliente"));
     }
 
     return (
@@ -72,11 +100,19 @@ export function Sales() {
             <CreateModal open={open} onClose={() => setOpen(false)} containerClass="mt-46">
                 <div class="flex flex-col gap-2 items-center">
                     <h1 class="text-3xl text-white font-semibold">Nova venda</h1>
-                    <form onSubmit={handleSubmit} class="w-full flex flex-col gap-3">
+                    <form ref={formRef} onSubmit={handleSubmit} class="w-full flex flex-col gap-3">
                         <div class="flex flex-col gap-1 w-full">
                             <label for="imovel" class="text-white">Imóvel</label>
                             <select id="imovel" name="imovel" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-3">
-                                <option>João</option>
+                                {imoveis.length > 0 ? (
+                                    imoveis.map((item) => (
+                                        <option key={item.id} value={item.id}>
+                                            {item.nome}
+                                        </option>
+                                    ))
+                                ) : (
+                                    <option disabled>Carregando...</option>
+                                )}
                             </select>
                         </div>
                         <div class="flex flex-col gap-1 w-full">
