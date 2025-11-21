@@ -1,8 +1,43 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CreateModal, Navbar } from "../components";
 
 export function Clients() {
     const [open, setOpen] = useState(false);
+
+    let clients = [];
+
+    useEffect(() => {
+        const token = sessionStorage.getItem("token");
+        if (token) {
+            getClients(token);
+        } else {
+            console.warn("Token não encontrado!");
+        }
+    }, []);
+
+    function getClients(token) {
+        const api = getApi('ws/clientes');
+
+        fetch(api, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        })
+        .then(res => {
+            if (!res.ok) throw new Error(`Erro na requisição: ${res.status}`);
+            return res.json();
+        })
+        .then(data => {
+            clients = data;
+            console.log('Resposta da API:', data);
+        })
+    }
+
+
+    function getApi(path) {
+        return `https://civic-sarajane-pedroscheurer-fd914fc3.koyeb.app/${path}`;
+    }
 
     let numeroParcelas = [];
 
@@ -14,6 +49,29 @@ export function Clients() {
 
     function handleSubmit(e) {
         e.preventDefault();
+        alert(clients);
+
+        const formData = new FormData(e.target);
+        const dados = Object.fromEntries(formData.entries());
+
+        const api = getApi('ws/clientes');
+        const token = sessionStorage.getItem("token");
+
+        fetch(api, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify(dados),         
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log('Resposta da API:', data);
+        })
+        .catch(err => {
+            console.error('Erro ao enviar os dados:', err);
+        });
     }
 
     return (
@@ -79,79 +137,95 @@ export function Clients() {
                     <h1 class="text-3xl text-white font-semibold">Novo Cliente</h1>
                     <form onSubmit={handleSubmit} class="w-full flex flex-col gap-3">
                         <div class="flex flex-col gap-1 w-full">
-                            <label for="cliente" class="text-white">Nome</label>
-                            <input type="text" id="cliente" name="cliente" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1" placeholder="Digite o nome do cliente"/>
+                            <label for="nome" class="text-white">Nome</label>
+                            <input type="text" id="nome" name="nome" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1" placeholder="Digite o nome do cliente"/>
                         </div>
                         <div class="flex flex-col gap-1 w-full">
-                            <label for="cliente" class="text-white">CPF</label>
-                            <input type="text" id="cliente" name="cliente" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1" placeholder="Digite o CPF do cliente"/>
+                            <label for="sobrenome" class="text-white">Sobrenome</label>
+                            <input type="text" id="sobrenome" name="sobrenome" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1" placeholder="Digite o sobrenome do cliente"/>
+                        </div>
+                        <div class="flex flex-col gap-1 w-full">
+                            <label for="cpf" class="text-white">CPF</label>
+                            <input type="text" id="cpf" name="cpf" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1" placeholder="Digite o CPF do cliente" maxLength={11}/>
                         </div>
                         <div class="flex flex-row gap-3 w-full">
                             <div class="flex flex-col gap-1 w-full">
-                                <label for="entrada" class="text-white">RG</label>
-                                <input id="entrada" name="entrada" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1 w-full" placeholder="Nº da identidade"/>
+                                <label for="rg" class="text-white">RG</label>
+                                <input id="rg" name="rg" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1 w-full" placeholder="Nº da identidade"/>
                             </div>
                             <div class="flex flex-col gap-1 w-full">
-                                <label for="comissao" class="text-white">Orgão Emissor/ UF</label>
-                                <input id="comissao" name="comissao" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1 w-full" placeholder="Org. Emissor/ UF"/>
+                                <label for="orgEmissor" class="text-white">Orgão Emissor</label>
+                                <input id="orgEmissor" name="orgEmissor" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1 w-full" placeholder="Org. Emissor"/>
                             </div>
+                        </div>
+                        <div class="flex flex-col gap-1 w-full">
+                            <label for="uf" class="text-white">UF</label>
+                            <input id="uf" name="uf" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1 w-full" placeholder="Unidade Federal"/>
                         </div>
                         <h1 class="text-3xl text-white font-semibold pt-4 pb-1">Endereço</h1>
-                        <div class="flex flex-row gap-3 w-full">
-                            <div class="flex flex-col gap-1 w-full">
-                                <label for="entrada" class="text-white">CEP</label>
-                                <input id="entrada" name="entrada" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1 w-full" placeholder="Digite o CEP"/>
-                            </div>
-                            <div class="flex flex-col gap-1 w-full">
-                                <label for="comissao" class="text-white">Cidade</label>
-                                <input id="comissao" name="comissao" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1 w-full" placeholder="Digite a cidade"/>
-                            </div>
-                        </div>
                         <div class="flex flex-col gap-1 w-full">
-                            <label for="valor" class="text-white">Logradouro</label>
-                            <input type="text" id="valor" name="valor" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1" placeholder="Digite o logradouro"/>
+                            <label for="logradouro" class="text-white">Logradouro</label>
+                            <input type="text" id="logradouro" name="logradouro" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1" placeholder="Digite o logradouro"/>
                         </div>
                         <div class="flex flex-row gap-3 w-full">
                             <div class="flex flex-col gap-1 w-full">
-                                <label for="entrada" class="text-white">Número</label>
-                                <input id="entrada" name="entrada" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1 w-full" placeholder="Nº do imóvel"/>
+                                <label for="numero" class="text-white">Número</label>
+                                <input id="numero" name="numero" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1 w-full" placeholder="Nº do imóvel"/>
                             </div>
                             <div class="flex flex-col gap-1 w-full">
-                                <label for="comissao" class="text-white">Bairro</label>
-                                <input id="comissao" name="comissao" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1 w-full" placeholder="Digite o bairro"/>
+                                <label for="bairro" class="text-white">Bairro</label>
+                                <input id="bairro" name="bairro" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1 w-full" placeholder="Digite o bairro"/>
                             </div>
                         </div>
                         <div class="flex flex-col gap-1 w-full">
-                            <label for="valor" class="text-white">Complemento</label>
-                            <input type="text" id="valor" name="valor" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1" placeholder="Digite o complemento"/>
+                            <label for="complemento" class="text-white">Complemento</label>
+                            <input type="text" id="complemento" name="complemento" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1" placeholder="Digite o complemento"/>
                         </div>
+                        <div class="flex flex-row gap-3 w-full">
+                            <div class="flex flex-col gap-1 w-full">
+                                <label for="cep" class="text-white">CEP</label>
+                                <input id="cep" name="cep" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1 w-full" placeholder="Digite o CEP"/>
+                            </div>
+                            <div class="flex flex-col gap-1 w-full">
+                                <label for="cidade" class="text-white">Cidade</label>
+                                <input id="cidade" name="cidade" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1 w-full" placeholder="Digite a cidade"/>
+                            </div>
+                        </div>   
+                        <div class="flex flex-col gap-1 w-full">
+                            <label for="estado" class="text-white">Estado</label>
+                            <input type="text" id="estado" name="estado" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1" placeholder="Digite o estado"/>
+                        </div>          
                         <h1 class="text-3xl text-white font-semibold pt-4 pb-1">Contato</h1>
                         <div class="flex flex-col gap-1 w-full">
-                            <label for="cliente" class="text-white">E-mail</label>
-                            <input type="text" id="cliente" name="cliente" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1" placeholder="Digite o email do cliente"/>
+                            <label for="email" class="text-white">E-mail</label>
+                            <input type="text" id="email" name="email" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1" placeholder="Digite o email do cliente"/>
                         </div>
                         <div class="flex flex-col gap-1 w-full">
-                            <label for="cliente" class="text-white">Telefone</label>
-                            <input type="text" id="cliente" name="cliente" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1" placeholder="Digite o telefone do cliente"/>
+                            <label for="telefone1" class="text-white">Telefone</label>
+                            <input type="text" id="telefone1" name="telefone1" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1" placeholder="Digite o telefone do cliente"/>
+                        </div> 
+                        <div class="flex flex-col gap-1 w-full">
+                            <label for="telefone2" class="text-white">Celular</label>
+                            <input type="text" id="telefone2" name="telefone2" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1" placeholder="Digite o celular do cliente"/>
                         </div> 
                         <h1 class="text-3xl text-white font-semibold pt-4 pb-1">Informações Adicionais</h1>
                         <div class="flex flex-col gap-1 w-full">
-                            <label for="cliente" class="text-white">Nacionalidade</label>
-                            <input type="text" id="cliente" name="cliente" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1" placeholder="Digite a nacionalidade do cliente"/>
+                            <label for="nacionalidade" class="text-white">Nacionalidade</label>
+                            <input type="text" id="nacionalidade" name="nacionalidade" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1" placeholder="Digite a nacionalidade do cliente"/>
                         </div>
                         <div class="flex flex-col gap-1 w-full">
-                                <label for="forma-pagamento" class="text-white">Sexo</label>
-                                <select id="forma-pagamento" name="forma-pagamento" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-3 w-full">
+                                <label for="sexo" class="text-white">Sexo</label>
+                                <select id="sexo" name="sexo" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-3 w-full">
                                     <option value="Masculino">Masculino</option>
                                     <option value="Feminino">Feminino</option>
                                     <option value="Não Identificado">Não Identificado</option>
                                 </select>
                             </div>
                         <div class="flex flex-col gap-1 w-full">
-                            <label for="cliente" class="text-white">Observações</label>
-                            <textarea type="text" id="cliente" name="cliente" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1 resize-none" rows="3" placeholder="Digite as observações"/>
+                            <label for="observacoes" class="text-white">Observações</label>
+                            <textarea type="text" id="observacoes" name="observacoes" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1 resize-none" rows="3" placeholder="Digite as observações"/>
                         </div>                      
-                        <button type="submit" class="bg-gradient-to-br from-[#C77DFF] to-[#CD8BFF] w-fit self-center text-white font-semibold rounded-lg px-4 py-1">Cadastrar</button>
+                        <button type="submit" class="bg-linear-to-br from-[#C77DFF] to-[#CD8BFF] w-fit self-center text-white font-semibold rounded-lg px-4 py-1">Cadastrar</button>
                     </form>
                     
                 </div>
