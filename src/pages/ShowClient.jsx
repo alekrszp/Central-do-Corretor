@@ -47,7 +47,11 @@ export function ShowClient() {
                 {client ? (
                     <div className="flex flex-col w-full max-w-[500px] m-auto">
                         <div className="flex flex-col gap-2 pb-6 border-b">
-                            <h1 className="text-4xl font-semibold">{client.nome} {client.sobrenome}</h1>
+                            <div className="flex flex-row justify-between items-center">
+                                <h1 className="text-4xl font-semibold">{client.nome} {client.sobrenome}</h1>
+                                <a href="/clients" class="text-xl font-semibold text-black">X</a>
+                            </div>
+                            
                             <p className="text-3xl font-semibold">{client.cpf}</p>
                         </div>
                         <div className="flex flex-row justify-between gap-2 py-12 border-b">
