@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Navbar } from "../components";
+import { Navbar, Loading } from "../components";
 
 export function ShowClient() {
     const [client, setClient] = useState(null);
@@ -27,13 +27,13 @@ export function ShowClient() {
                 'Authorization': `Bearer ${token}`,
             }
         })
-        .then(res => {
-            if (!res.ok) throw new Error(`Erro na requisição: ${res.status}`);
-            return res.json();
-        })
-        .then(data => {
-            setClient(data[0]);
-        })
+            .then(res => {
+                if (!res.ok) throw new Error(`Erro na requisição: ${res.status}`);
+                return res.json();
+            })
+            .then(data => {
+                setClient(data[0]);
+            })
     }
 
     function getApi(path) {
@@ -51,7 +51,7 @@ export function ShowClient() {
                                 <h1 className="text-4xl font-semibold">{client.nome} {client.sobrenome}</h1>
                                 <a href="/clients" class="text-xl font-semibold text-black">X</a>
                             </div>
-                            
+
                             <p className="text-3xl font-semibold">{client.cpf}</p>
                         </div>
                         <div className="flex flex-row justify-between gap-2 py-12 border-b">
@@ -112,13 +112,13 @@ export function ShowClient() {
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                 ) : (
-                    <p>Carregando cliente...</p>
+                    <Loading />
                 )}
             </main>
-            
+
         </>
     );
 }
