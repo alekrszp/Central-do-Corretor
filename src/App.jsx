@@ -5,6 +5,7 @@ import { Register } from "./pages/Register";
 import { Map } from "./pages/Map";
 import { Sales } from "./pages/Sales";
 import { Clients } from "./pages/Clients";
+import { ShowClient } from "./pages/ShowClient";
 import { PrivateRoute, Logo } from "./components/index";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         </Route>
         <Route path="/sales" element={<Sales />} />
         <Route path="/clients" element={<Clients />} />
+        <Route path="/client" element={<ShowClient />} />
         <Route
           path="/map"
           element={

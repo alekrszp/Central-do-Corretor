@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { CreateModal, Navbar } from "../components";
+import { useNavigate } from "react-router-dom";
 
 export function Clients() {
     const [open, setOpen] = useState(false);
-
-    let clients = [];
+    const [clients, setClients] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = sessionStorage.getItem("token");
@@ -29,8 +30,7 @@ export function Clients() {
             return res.json();
         })
         .then(data => {
-            clients = data;
-            console.log('Resposta da API:', data);
+            setClients(data);
         })
     }
 
@@ -39,17 +39,8 @@ export function Clients() {
         return `https://civic-sarajane-pedroscheurer-fd914fc3.koyeb.app/${path}`;
     }
 
-    let numeroParcelas = [];
-
-    const parcelas = 72;
-    
-    for (let i = 1; i <= parcelas; i++ ) {
-        numeroParcelas.push(<option key={i} value={i}>{i}x</option>);
-    }
-
     function handleSubmit(e) {
         e.preventDefault();
-        alert(clients);
 
         const formData = new FormData(e.target);
         const dados = Object.fromEntries(formData.entries());
@@ -67,11 +58,21 @@ export function Clients() {
         })
         .then(res => res.json())
         .then(data => {
-            console.log('Resposta da API:', data);
+            console.log('Cliente criado:', data);
+
+            setClients(prev => [...prev, data]);
+
+            setOpen(false);
+
+            e.target.reset();
         })
         .catch(err => {
             console.error('Erro ao enviar os dados:', err);
         });
+    }
+
+    function showClient(nome) {
+        navigate(`/client?nome=${nome}`);
     }
 
     return (
@@ -81,54 +82,27 @@ export function Clients() {
                 <div class="flex flex-col gap-12">
                     <div class="w-full flex justify-end">
                         <button onClick={() => setOpen(true)} type="button" class="bg-linear-to-r from-[#FBBC63] to-[#EFAB4B] py-1.5 px-7 rounded-full text-white font-semibold">
-                            + Nova Venda
+                            + Novo Cliente
                         </button>
                     </div>
                     <div class="flex flex-col bg-linear-to-r from-[#FFFFFF] to-[#FEFEFE] rounded-2xl px-4 pt-4 pb-6 max-h-64 overflow-y-auto text-neutral-900">
-                        <div class="flex flex-row justify-between items-center border-b py-2">
-                            <div class="flex flex-row gap-3 items-center">
-                                <img class="w-16 rounded-full" src="user-image.png" /> 
-                                <div class="flex flex-col">
-                                    <h3 class="font-semibold text-neutral-700">Nome do Cliente</h3>
-                                    <p class="text-sm">000.000.000-00</p>
+                        {clients.length > 0 ? (
+                            clients.map((item) => (
+                                <div class="flex flex-row justify-between items-center border-b py-2">
+                                    <div class="flex flex-row gap-3 items-center">
+                                        <img class="w-16 rounded-full" src="user-image.png" /> 
+                                        <div class="flex flex-col">
+                                            <h3 class="font-semibold text-neutral-700">{item.nome}</h3>
+                                            <p class="text-sm">{item.cpf}</p>
 
+                                        </div>
+                                    </div>                           
+                                    <button onClick={() => showClient(item.nome)} class="text-lg font-medium text-neutral-900! no-underline!">+</button>
                                 </div>
-                            </div>                           
-                            <a href="#" class="text-lg font-medium text-neutral-900! no-underline!">+</a>
-                        </div>
-                        <div class="flex flex-row justify-between items-center border-b py-2">
-                            <div class="flex flex-row gap-3 items-center">
-                                <img class="w-16 rounded-full" src="user-image.png" /> 
-                                <div class="flex flex-col">
-                                    <h3 class="font-semibold text-neutral-700">Nome do Cliente</h3>
-                                    <p class="text-sm">000.000.000-00</p>
-
-                                </div>
-                            </div>                           
-                            <a href="#" class="text-lg font-medium text-neutral-900! no-underline!">+</a>
-                        </div>
-                        <div class="flex flex-row justify-between items-center border-b py-2">
-                            <div class="flex flex-row gap-3 items-center">
-                                <img class="w-16 rounded-full" src="user-image.png" /> 
-                                <div class="flex flex-col">
-                                    <h3 class="font-semibold text-neutral-700">Nome do Cliente</h3>
-                                    <p class="text-sm">000.000.000-00</p>
-
-                                </div>
-                            </div>                           
-                            <a href="#" class="text-lg font-medium text-neutral-900! no-underline!">+</a>
-                        </div>
-                        <div class="flex flex-row justify-between items-center border-b py-2">
-                            <div class="flex flex-row gap-3 items-center">
-                                <img class="w-16 rounded-full" src="user-image.png" /> 
-                                <div class="flex flex-col">
-                                    <h3 class="font-semibold text-neutral-700">Nome do Cliente</h3>
-                                    <p class="text-sm">000.000.000-00</p>
-
-                                </div>
-                            </div>                           
-                            <a href="#" class="text-lg font-medium text-neutral-900! no-underline!">+</a>
-                        </div>
+                            ))
+                        ) : (
+                            <option disabled>Carregando Clientes...</option>
+                        )}
                     </div>
                 </div>
             </main>
@@ -184,7 +158,7 @@ export function Clients() {
                         <div class="flex flex-row gap-3 w-full">
                             <div class="flex flex-col gap-1 w-full">
                                 <label for="cep" class="text-white">CEP</label>
-                                <input id="cep" name="cep" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1 w-full" placeholder="Digite o CEP"/>
+                                <input id="cep" name="cep" class="text-white focus:ring-0 focus:outline-none bg-neutral-700 rounded-lg px-2 py-1 w-full" placeholder="Digite o CEP" minLength={8} maxLength={8}/>
                             </div>
                             <div class="flex flex-col gap-1 w-full">
                                 <label for="cidade" class="text-white">Cidade</label>
