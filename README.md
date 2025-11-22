@@ -18,7 +18,6 @@ O diferencial do projeto é a integração com a **Google Maps API**, permitindo
 * **👥 Controle de Clientes:** Base de dados de clientes compradores e proprietários, com histórico de preferências.
 * **💰 Registro de Vendas:** Acompanhamento de negociações e vendas concluídas.
 * **🗺️ Mapa Interativo:** Visualização de pinos no mapa indicando a localização exata dos imóveis disponíveis (Integração Google Maps).
-* **📊 Dashboard Resumo:** Visão geral com contagem de imóveis ativos, vendas no mês e novos clientes.
 
 ## 🚀 Tecnologias Utilizadas
 
