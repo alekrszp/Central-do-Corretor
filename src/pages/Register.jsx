@@ -32,6 +32,9 @@ export function Register() {
     try {
       setIsLoading(true);
       await signUp(name, email, senha);
+
+      localStorage.setItem("userName", name);
+
       navigate("/login");
     } catch (err) {
       setErro(err.message);
@@ -76,7 +79,7 @@ export function Register() {
           <PasswordRequirements password={senha} />
 
           {erro && (
-            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl mt-2 mb-6 animate-slideUp">
+            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl mt-2 mb-6">
                 <p className="text-red-300 text-sm text-center font-bold">{erro}</p>
             </div>
           )}
@@ -85,7 +88,7 @@ export function Register() {
         </form>
         <div className="text-center mt-6 text-sm text-black">
           <span>Já tem conta? 
-            <Link to="/" className="text-[#7B61FF] hover:text-[#A391FF] font-bold ml-1.5 transition-colors decoration-transparent hover:underline">
+            <Link to="/" className="text-[#7B61FF] hover:text-[#A391FF] font-bold ml-1.5">
               Faça login
             </Link>
           </span>
